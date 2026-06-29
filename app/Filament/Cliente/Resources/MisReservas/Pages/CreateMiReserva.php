@@ -7,7 +7,7 @@ use App\Models\Reserva;
 use App\Services\AsignadorTecnico;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Validation\ValidationException;
+use Filament\Support\Exceptions\Halt;
 
 class CreateMiReserva extends CreateRecord
 {
@@ -22,9 +22,13 @@ class CreateMiReserva extends CreateRecord
         );
 
         if ($tecnico === null) {
-            throw ValidationException::withMessages([
-                'hora' => 'No hay técnicos disponibles para el servicio, fecha y hora seleccionados. Por favor elige otro horario.',
-            ]);
+            Notification::make()
+                ->title('Sin disponibilidad')
+                ->body('No hay técnicos disponibles para el servicio, fecha y hora seleccionados. Elige otro horario.')
+                ->danger()
+                ->send();
+
+            throw new Halt();
         }
 
         $data['cliente_id'] = auth()->id();
@@ -37,8 +41,13 @@ class CreateMiReserva extends CreateRecord
     protected function getCreatedNotification(): ?Notification
     {
         return Notification::make()
-            ->title('Reserva creada exitosamente')
+            ->title('¡Reserva creada!')
             ->body('Tu técnico ha sido asignado automáticamente.')
             ->success();
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return MisReservasResource::getUrl('index');
     }
 }

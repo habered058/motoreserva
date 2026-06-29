@@ -3,7 +3,7 @@
 namespace App\Filament\Cliente\Resources\MisReservas\Pages;
 
 use App\Filament\Cliente\Resources\MisReservasResource;
-use Filament\Actions\CreateAction;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ListRecords;
 
 class ListMisReservas extends ListRecords
@@ -13,7 +13,10 @@ class ListMisReservas extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            Action::make('nueva_reserva')
+                ->label('Nueva Reserva')
+                ->url(MisReservasResource::getUrl('create'))
+                ->icon('heroicon-o-plus'),
         ];
     }
 }

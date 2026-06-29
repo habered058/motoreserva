@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Filament\Resources\Tecnicos\Pages;
+
+use App\Filament\Resources\Tecnicos\TecnicoResource;
+use Filament\Actions\DeleteAction;
+use Filament\Resources\Pages\EditRecord;
+
+class EditTecnico extends EditRecord
+{
+    protected static string $resource = TecnicoResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            DeleteAction::make(),
+        ];
+    }
+}
